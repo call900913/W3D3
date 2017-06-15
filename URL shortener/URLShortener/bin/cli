@@ -1,0 +1,37 @@
+
+require 'launchy'
+
+puts "Please enter email"
+
+email = gets.chomp
+
+user = User.all.where("email = ?", email)
+
+puts "#{user}, would you like to (v)isit a shortened url or (c)reate one?"
+
+reply=gets.chomp
+
+if reply=='v'
+  puts "Type in the shortened URL"
+  shortened = gets.chomp
+
+  url_obj = ShortenedUrl.all.where("short_url = ?", shortened)
+
+  puts "loading #{url_obj.last.fetch_long}"
+
+  Launchy.open(url_obj.last.fetch_long)
+else
+  puts "Type in the URL"
+
+  url = gets.chomp
+
+  the_url = ShortenedUrl.create_shortenedurl(user.first.id, url)
+
+  puts "#{the_url.inspect}"
+end
+
+
+
+#rails runner
+
+#Launchy.open("http://www.ruby-lang.org/")
